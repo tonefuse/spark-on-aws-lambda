@@ -1,18 +1,18 @@
 # Use AWS Lambda Python 3.8 image as base
-FROM public.ecr.aws/lambda/python:3.8
+FROM public.ecr.aws/lambda/python:3.9
 
 # Setting the compatible versions of libraries
-ARG HADOOP_VERSION=3.2.4
-ARG AWS_SDK_VERSION=1.11.901
+ARG HADOOP_VERSION=3.3.6
+ARG AWS_SDK_VERSION=1.12.569
 ARG PYSPARK_VERSION=3.3.0
 
 #FRAMEWORK will passed during the Docker build. For Apache Iceberg in somecase downgrading PYSPARK_VERSION to 3.2.0 will be good
 ARG FRAMEWORK
-ARG DELTA_FRAMEWORK_VERSION=2.2.0
-ARG HUDI_FRAMEWORK_VERSION=0.12.2
+ARG DELTA_FRAMEWORK_VERSION=3.0.0
+ARG HUDI_FRAMEWORK_VERSION=0.14.0
 ARG ICEBERG_FRAMEWORK_VERSION=2.2.0
 ARG ICEBERG_FRAMEWORK_VERSION=3.2_2.12
-ARG ICEBERG_FRAMEWORK_SUB_VERSION=1.1.0
+ARG ICEBERG_FRAMEWORK_SUB_VERSION=1.4.2
 ARG DEEQU_FRAMEWORK_VERSION=2.0.3-spark-3.3
 
 
@@ -26,6 +26,7 @@ RUN yum update -y && \
 
     pip install --upgrade pip && \
     pip install pyspark==$PYSPARK_VERSION boto3 && \
+    pip install pandas polars pyarrow s3fs fsspec awswrangler delta-spark pydeequ pendulum pytz pyathena pydantic duckdb && \
 
     yum clean all
 
@@ -47,7 +48,7 @@ RUN echo "$FRAMEWORK" | grep -q "DEEQU" && \
 
 
 # Set environment variables for PySpark
-ENV SPARK_HOME="/var/lang/lib/python3.8/site-packages/pyspark"
+ENV SPARK_HOME="/var/lang/lib/python3.9/site-packages/pyspark"
 ENV SPARK_VERSION=3.3.0
 ENV PATH=$PATH:$SPARK_HOME/bin
 ENV PATH=$PATH:$SPARK_HOME/sbin
