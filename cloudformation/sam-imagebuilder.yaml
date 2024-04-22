@@ -7,7 +7,7 @@ Parameters:
     Description: Prefix of the Image Repository to be created
   Framework:
     Type: String
-    Default: HUDI
+    Default: DELTA
     Description: Framework jars to download
     AllowedValues:
       - HUDI
@@ -177,7 +177,7 @@ Resources:
             if event.get('StackId',None) is not None:
               logger.info('Cfn request. Send Response')
               cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, responseData['buildid'])
-      Runtime: python3.8
+      Runtime: python3.9
       Description: A function that runs the code build project.
       Policies:
         - Statement:
